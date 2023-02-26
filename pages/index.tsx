@@ -4,22 +4,22 @@ import { motion } from "framer-motion";
 
 const MAX_CHAT_WIDTH = 400;
 
-const Bubble: React.FC<{ text: string; active?: boolean }> = ({
-  text,
-  active = false,
-}) => {
+const Bubble: React.FC<{
+  text: string;
+  active?: boolean;
+}> = ({ text, active = false }) => {
   return (
     <>
       {active ? (
         <div
-          className={`inline-block max-w-[${MAX_CHAT_WIDTH}px] relative bg-black px-6 py-4 rounded-3xl self-start text-white`}
+          className={`inline-block max-w-[400px] relative bg-white px-6 py-4 rounded-3xl self-start text-black`}
         >
           {text}
           <span className="animate-pulse duration-75">|</span>
         </div>
       ) : (
         <div
-          className={`inline-block max-w-[${MAX_CHAT_WIDTH}px] relative bg-white px-6 py-4 rounded-3xl self-start text-black`}
+          className={`inline-block max-w-[400px] relative bg-black px-6 py-4 rounded-3xl self-start text-white`}
         >
           {text}
         </div>
@@ -28,12 +28,18 @@ const Bubble: React.FC<{ text: string; active?: boolean }> = ({
   );
 };
 
-const CHATS_VISIBLE = 4;
+const CHATS_VISIBLE = 3;
 
 export default function Home() {
   const [currentChat, setCurrentChat] = useState<string>("");
   const [history, setHistory] = useState<string[]>([]);
+
+  const [activeColor, setActiveColor] = useState<string>("#FFFFFF");
+  const [oldColor, setOldColor] = useState<string>("#000000");
+
   const inputRef = useRef<HTMLInputElement>(null);
+  const activeChatRef = useRef<HTMLInputElement>(null);
+  const oldChatRef = useRef<HTMLInputElement>(null);
 
   const handleTyping = (e: any) => {
     setCurrentChat(e.target.value);
@@ -58,6 +64,25 @@ export default function Home() {
     }
   };
 
+  const handleColorChange = () => {
+    if (!activeChatRef.current || !oldChatRef.current) return;
+
+    setActiveColor(activeChatRef.current.value);
+    setOldColor(oldChatRef.current.value);
+  };
+
+  const getOldChats = () => {
+    if (history.length > CHATS_VISIBLE) {
+      const chats = history.slice(
+        history.length - CHATS_VISIBLE,
+        history.length
+      );
+      return chats;
+    } else {
+      return history;
+    }
+  };
+
   return (
     <>
       <Head>
@@ -72,17 +97,21 @@ export default function Home() {
       <main className="w-full min-h-screen bg-chroma-key">
         <div className="absolute bottom-0 left-0 p-8 flex flex-col">
           <div className="mb-8">
-            {history.slice(history.length - CHATS_VISIBLE).map((e) => (
-              <>
-                <Bubble text={e} />
+            {getOldChats().map((e, idx) => (
+              <div key={idx}>
+                <Bubble text={e} oldColor={oldColor} />
                 <span className="h-4 block"></span>
-              </>
+              </div>
             ))}
           </div>
           {currentChat.length > 0 && (
             <>
               <motion.div animate={{ y: -20 }}>
-                <Bubble text={currentChat} active={true} />
+                <Bubble
+                  text={currentChat}
+                  activeColor={activeColor}
+                  active={true}
+                />
                 <span className="h-4 block"></span>
               </motion.div>
             </>
@@ -91,7 +120,7 @@ export default function Home() {
         <div className="p-8 flex flex-col w-full">
           <input
             className="text-5xl"
-            onKeyPress={handleEnter}
+            onKeyDown={handleEnter}
             onChange={handleTyping}
             ref={inputRef}
             type="text"
