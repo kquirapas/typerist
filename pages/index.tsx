@@ -47,6 +47,13 @@ export default function Home() {
     if (value === "") return;
 
     if (e.key === "Enter") {
+      if (value === "clear") {
+        setHistory([]);
+        setCurrentChat("");
+        inputRef.current.value = "";
+        return;
+      }
+
       setHistory((prev) => {
         let newHistory = prev.slice();
         newHistory.push(value);
