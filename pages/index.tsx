@@ -9,12 +9,12 @@ const Bubble: React.FC<{
   return (
     <>
       {active ? (
-        <div className="inline-block max-w-[400px] relative bg-fb-white px-6 py-4 rounded-3xl self-start text-black drop-shadow-lg">
+        <div className="font-poppins inline-block max-w-[400px] relative bg-fb-white px-6 py-4 rounded-3xl self-start text-black drop-shadow-lg">
           {text}
           <span className="animate-blink duration-75">|</span>
         </div>
       ) : (
-        <div className="inline-block max-w-[400px] relative bg-black px-6 py-4 rounded-3xl self-start text-white drop-shadow-lg">
+        <div className="font-poppins inline-block max-w-[400px] relative bg-black px-6 py-4 rounded-3xl self-start text-white drop-shadow-lg">
           {text}
         </div>
       )}

@@ -15,6 +15,9 @@ module.exports = {
         "fb-white": "#fefefe",
         "fb-blue": "#0084ff",
       },
+      fontFamily: {
+        poppins: "Poppins",
+      },
       keyframes: {
         "pulse-opacity": {
           "0%": { opacity: 0 },
