@@ -2,8 +2,6 @@ import Head from "next/head";
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 
-const MAX_CHAT_WIDTH = 400;
-
 const Bubble: React.FC<{
   text: string;
   active?: boolean;
@@ -11,16 +9,12 @@ const Bubble: React.FC<{
   return (
     <>
       {active ? (
-        <div
-          className={`inline-block max-w-[400px] relative bg-white px-6 py-4 rounded-3xl self-start text-black`}
-        >
+        <div className="inline-block max-w-[400px] relative bg-fb-white px-6 py-4 rounded-3xl self-start text-black drop-shadow-lg">
           {text}
-          <span className="animate-pulse duration-75">|</span>
+          <span className="animate-blink duration-75">|</span>
         </div>
       ) : (
-        <div
-          className={`inline-block max-w-[400px] relative bg-black px-6 py-4 rounded-3xl self-start text-white`}
-        >
+        <div className="inline-block max-w-[400px] relative bg-black px-6 py-4 rounded-3xl self-start text-white drop-shadow-lg">
           {text}
         </div>
       )}
@@ -64,13 +58,6 @@ export default function Home() {
     }
   };
 
-  const handleColorChange = () => {
-    if (!activeChatRef.current || !oldChatRef.current) return;
-
-    setActiveColor(activeChatRef.current.value);
-    setOldColor(oldChatRef.current.value);
-  };
-
   const getOldChats = () => {
     if (history.length > CHATS_VISIBLE) {
       const chats = history.slice(
@@ -99,7 +86,7 @@ export default function Home() {
           <div className="mb-8">
             {getOldChats().map((e, idx) => (
               <div key={idx}>
-                <Bubble text={e} oldColor={oldColor} />
+                <Bubble text={e} />
                 <span className="h-4 block"></span>
               </div>
             ))}
@@ -107,11 +94,7 @@ export default function Home() {
           {currentChat.length > 0 && (
             <>
               <motion.div animate={{ y: -20 }}>
-                <Bubble
-                  text={currentChat}
-                  activeColor={activeColor}
-                  active={true}
-                />
+                <Bubble text={currentChat} active={true} />
                 <span className="h-4 block"></span>
               </motion.div>
             </>
